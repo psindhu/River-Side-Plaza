@@ -1,0 +1,60 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+<script type="text/javascript">
+window.onload = function () {
+var chart = new CanvasJS.Chart("chartContainer",{
+title:{
+text: "FOREX RATES ON 2000"
+},
+axisY: {
+title: "Number of Locations",                   
+},
+axisY2: {
+title: "Percent",
+valueFormatString: "0'%'"
+},
+data: [
+{
+type: "column",
+dataPoints: [
+{ label: "AUD", y: 1.5346 },
+{ label: "CAD", y: 1.457 },
+{ label: "CHF", y: 1.6043 },
+{ label: "CYP", y: 0.5767 },
+{ label: "CZK", y: 36.063 },                      
+{ label: "DKK", y: 7.4404 },
+]
+}
+]
+});
+
+chart.render();
+createPareto(chart); 
+
+function createPareto(chart){
+var dps = [];
+var yValue, yTotal = 0, yPercent = 0;
+
+for(var i = 0; i < chart.data[0].dataPoints.length; i++)
+yTotal += chart.data[0].dataPoints[i].y;
+
+for(var i = 0; i < chart.data[0].dataPoints.length; i++){
+yValue = chart.data[0].dataPoints[i].y;
+yPercent += (yValue / yTotal * 100);
+dps.push({label: chart.data[0].dataPoints[i].label, y: yPercent});
+}
+chart.addTo("data",{type:"line", yValueFormatString: "0'%'", dataPoints: dps});
+chart.data[1].set("axisYType", "secondary");
+chart.axisY[0].set("maximum", yTotal);
+chart.axisY2[0].set("maximum", 100);
+}
+}
+</script>
+<script type="text/javascript" src="/assets/script/canvasjs.min.js"></script>
+</head>
+<body>
+<div id="chartContainer" style="height: 300px; width: 100%;"></div>
+</body>
+</html>
